@@ -7,26 +7,34 @@ using namespace std;
 const int EMP_RATE_PER_HOUR = 20;
 const int IS_PART_TIME = 1;
 const int IS_FULL_TIME = 2;
+const int NUMBER_OF_WORKING_DAYS = 20;
 
 int empHrs = 0;
 int empWage = 0;
+int totalWage = 0;
 
 int main() {
+
+	for( int day = 0; day < NUMBER_OF_WORKING_DAYS; day++ ) {
 	srand(time(0));
 	int employee_Check = rand() % 3 + 1;
-	if( employee_Check == IS_PART_TIME ) {
-		empHrs = 4;
-		cout << "Employee wage for Part Time" << endl;
-	} else if( employee_Check == IS_FULL_TIME ) {
-		empHrs = 8;
-		cout << "Employee wage for Full Time" << endl;
-	} else {
-		empHrs = 0;
-		cout << "Employee is absent" << endl;
-	}
 
+		switch( employee_Check ) {
+			case IS_PART_TIME:
+				empHrs = 4;
+				break;
+
+			case IS_FULL_TIME:
+				empHrs = 8;
+				break;
+			default:
+				empHrs = 0;
+		}
 	empWage = empHrs * EMP_RATE_PER_HOUR;
-	cout << empWage << endl;
-return 0;
+	totalWage += empWage;
+
+	}
+	cout << "Total wage of month is: "<< totalWage << endl;
+	return 0;
 
 }
