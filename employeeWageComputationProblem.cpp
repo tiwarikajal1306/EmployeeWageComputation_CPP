@@ -19,7 +19,7 @@ int empWage = 0;
 int totalEmpWage = 0;
 int totalWorkingDays = 0;
 
-void employeeWage(string name)
+void employeeWage(string name, int months )
 {
 	const int IS_PART_TIME = 1;
 	const int IS_FULL_TIME = 2;
@@ -30,7 +30,7 @@ void employeeWage(string name)
 	fileStream.open( "EmployeeWage.csv", ios::out | ios::app );
 	fileStream << "Day" << "," << "Name" << "," << "TotalEmpHrs" << "," << "TotalEmpWage" << endl;
 
-	while ( totalEmpHrs < MAX_HRS_IN_MONTH && totalWorkingDays < NUMBER_OF_WORKING_DAYS ) {
+	while ( totalEmpHrs < MAX_HRS_IN_MONTH * months && totalWorkingDays < NUMBER_OF_WORKING_DAYS * months  ) {
 		totalWorkingDays++;
 		int employee_Check = rand() % 3 + 1;
 
@@ -75,10 +75,15 @@ int main()
         fstream fileStream;
         fileStream.open( "EmployeeWage.csv", ios::out | ios::trunc );
 
+	int totalMonths;
+	cout << "Enter the number of month month" << endl;
+	cin >> totalMonths;
+
 	struct CalculateEmpWage calculateEmpWage1;
-	calculateEmpWage1.employeeWage("Kajal");
+	calculateEmpWage1.employeeWage("Kajal", totalMonths);
 	sleep(3);
+
 	struct CalculateEmpWage calculateEmpWage2;
-	calculateEmpWage2.employeeWage("NiKita");
+	calculateEmpWage2.employeeWage("NiKita", totalMonths);
 	return 0;
 }
