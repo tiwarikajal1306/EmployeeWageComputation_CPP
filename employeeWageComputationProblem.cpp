@@ -9,17 +9,13 @@ using namespace std;
 struct CalculateEmpWage
 {
 
-int EMP_RATE_PER_HOUR = 20;
-int NUMBER_OF_WORKING_DAYS = 20;
-int MAX_HRS_IN_MONTH = 100;
-
 int empHrs = 0;
 int totalEmpHrs = 0;
 int empWage = 0;
 int totalEmpWage = 0;
 int totalWorkingDays = 0;
 
-void employeeWage(string name, int months )
+void employeeWage( string name, int months, string companyName, int  EMP_RATE_PER_HOUR, int NUMBER_OF_WORKING_DAYS , int MAX_HRS_IN_MONTH )
 {
 	const int IS_PART_TIME = 1;
 	const int IS_FULL_TIME = 2;
@@ -28,7 +24,7 @@ void employeeWage(string name, int months )
 
 	fstream fileStream;
 	fileStream.open( "EmployeeWage.csv", ios::out | ios::app );
-	fileStream << "Day" << "," << "Name" << "," << "TotalEmpHrs" << "," << "TotalEmpWage" << endl;
+	fileStream << "Day" << "," << "CompanyName" << "," << "Name" << "," << "TotalEmpHrs" << "," << "TotalEmpWage" << endl;
 
 	while ( totalEmpHrs < MAX_HRS_IN_MONTH * months && totalWorkingDays < NUMBER_OF_WORKING_DAYS * months  ) {
 		totalWorkingDays++;
@@ -48,7 +44,7 @@ void employeeWage(string name, int months )
 
 		totalEmpHrs +=empHrs;
 		totalEmpWage = totalEmpHrs * EMP_RATE_PER_HOUR;
-		fileStream << totalWorkingDays << "," << name << "," << totalEmpHrs << "," << totalEmpWage << endl;
+		fileStream << totalWorkingDays << "," << companyName << "," << name << "," << totalEmpHrs << "," << totalEmpWage << endl;
 	}
 	fileStream.close();
 
@@ -80,10 +76,10 @@ int main()
 	cin >> totalMonths;
 
 	struct CalculateEmpWage calculateEmpWage1;
-	calculateEmpWage1.employeeWage("Kajal", totalMonths);
+	calculateEmpWage1.employeeWage("Kajal", totalMonths, "BridgeLabz", 20, 20, 100);
 	sleep(3);
 
 	struct CalculateEmpWage calculateEmpWage2;
-	calculateEmpWage2.employeeWage("NiKita", totalMonths);
+	calculateEmpWage2.employeeWage("NiKita", totalMonths, "Amazon", 20, 25, 70);
 	return 0;
 }
