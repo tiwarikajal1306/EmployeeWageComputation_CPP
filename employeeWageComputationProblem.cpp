@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>
 
 using namespace std;
 
@@ -16,10 +17,15 @@ int empWage = 0;
 int totalEmpWage = 0;
 int totalWorkingDays = 0;
 
-int main() {
+int main()
+{
 	srand(time(0));
 
-	while ( totalEmpHrs <= MAX_HRS_IN_MONTH && totalWorkingDays <= NUMBER_OF_WORKING_DAYS ) {
+	fstream fileStream;
+	fileStream.open( "EmployeeWage.csv", ios::out );
+	fileStream << "totalEmpHrs" << "," << "totalEmpWage" << endl;
+
+	while ( totalEmpHrs < MAX_HRS_IN_MONTH && totalWorkingDays < NUMBER_OF_WORKING_DAYS ) {
 		totalWorkingDays++;
 		int employee_Check = rand() % 3 + 1;
 
@@ -34,9 +40,26 @@ int main() {
 			default:
 				empHrs = 0;
 		}
+
 		totalEmpHrs +=empHrs;
+		totalEmpWage = totalEmpHrs * EMP_RATE_PER_HOUR;
+		fileStream << totalEmpHrs << "," << totalEmpWage << endl;
 	}
+	fileStream.close();
+
 	totalEmpWage = totalEmpHrs * EMP_RATE_PER_HOUR;
 	cout << "employee wage is : "<< totalEmpWage << endl;
+
+	fstream fin;
+	string data;
+	cout<<"\nCSV file has been successfully created..!!";
+        cout<<"\n\nDisplaying the content of CSV file=>\n\n";
+
+	fin.open( "EmployeeWage.csv", ios::in );
+
+		 while( getline (fin, data) ) {
+                        cout << data << endl;
+                }
+
 	return 0;
 }
