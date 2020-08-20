@@ -14,9 +14,9 @@ int empWage = 0;
 int totalWage = 0;
 
 int main() {
+	  srand(time(0));
 
 	for( int day = 0; day < NUMBER_OF_WORKING_DAYS; day++ ) {
-	srand(time(0));
 	int employee_Check = rand() % 3 + 1;
 
 		switch( employee_Check ) {
