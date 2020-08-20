@@ -6,8 +6,25 @@
 
 using namespace std;
 
-struct CalculateEmpWage
+struct EmpWageBuilder
 {
+
+string empName;
+int months;
+string companyName;
+int  EMP_RATE_PER_HOUR;
+int NUMBER_OF_WORKING_DAYS;
+int MAX_HRS_IN_MONTH;
+
+EmpWageBuilder( string name, int months, string companyName, int  EMP_RATE_PER_HOUR, int NUMBER_OF_WORKING_DAYS , int MAX_HRS_IN_MONTH ) {
+	this -> empName = name;
+	this -> months = months;
+	this -> companyName = companyName;
+	this ->  EMP_RATE_PER_HOUR =  EMP_RATE_PER_HOUR;
+	this -> NUMBER_OF_WORKING_DAYS = NUMBER_OF_WORKING_DAYS;
+	this -> MAX_HRS_IN_MONTH = MAX_HRS_IN_MONTH;
+}
+
 
 int empHrs = 0;
 int totalEmpHrs = 0;
@@ -15,7 +32,8 @@ int empWage = 0;
 int totalEmpWage = 0;
 int totalWorkingDays = 0;
 
-void employeeWage( string name, int months, string companyName, int  EMP_RATE_PER_HOUR, int NUMBER_OF_WORKING_DAYS , int MAX_HRS_IN_MONTH )
+
+void employeeWage()
 {
 	const int IS_PART_TIME = 1;
 	const int IS_FULL_TIME = 2;
@@ -44,7 +62,7 @@ void employeeWage( string name, int months, string companyName, int  EMP_RATE_PE
 
 		totalEmpHrs +=empHrs;
 		totalEmpWage = totalEmpHrs * EMP_RATE_PER_HOUR;
-		fileStream << totalWorkingDays << "," << companyName << "," << name << "," << totalEmpHrs << "," << totalEmpWage << endl;
+		fileStream << totalWorkingDays << "," << companyName << "," << empName << "," << totalEmpHrs << "," << totalEmpWage << endl;
 	}
 	fileStream.close();
 
@@ -75,11 +93,11 @@ int main()
 	cout << "Enter the number of month month" << endl;
 	cin >> totalMonths;
 
-	struct CalculateEmpWage calculateEmpWage1;
-	calculateEmpWage1.employeeWage("Kajal", totalMonths, "BridgeLabz", 20, 20, 100);
+	EmpWageBuilder bridgeLabz("Kajal", totalMonths, "BridgeLabz", 20, 20, 100);
+	bridgeLabz.employeeWage();
 	sleep(3);
 
-	struct CalculateEmpWage calculateEmpWage2;
-	calculateEmpWage2.employeeWage("NiKita", totalMonths, "Amazon", 20, 25, 70);
+	EmpWageBuilder amazon("NiKita", totalMonths, "Amazon", 20, 25, 70);
+	amazon.employeeWage();
 	return 0;
 }
