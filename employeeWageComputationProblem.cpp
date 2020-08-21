@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <list>
+#include <vector>
 #include <cstdlib>
 #include <fstream>
 #include <unistd.h>
@@ -15,6 +16,11 @@ struct EmpWageBuilder
 	int  EMP_RATE_PER_HOUR;
 	int NUMBER_OF_WORKING_DAYS;
 	int MAX_HRS_IN_MONTH;
+	list<int> dailyWage;
+
+	void setdailyWage( list<int> dailyWage ) {
+		this -> dailyWage = dailyWage;
+	}
 
 	void employeeDetails( string name, int months, string companyName, int  EMP_RATE_PER_HOUR, int NUMBER_OF_WORKING_DAYS , int MAX_HRS_IN_MONTH ) {
 		this -> empName = name;
@@ -35,6 +41,7 @@ struct EmpWage
 	}
 	void employeeWage(EmpWageBuilder empWageBuilder)
 	{
+		list<int> dailyWage;
 
 		int empHrs = 0;
 		int totalEmpHrs = 0;
@@ -71,6 +78,7 @@ struct EmpWage
 
 			totalEmpHrs +=empHrs;
 			totalEmpWage = totalEmpHrs * empWageBuilder.EMP_RATE_PER_HOUR;
+			dailyWage.push_back(totalEmpWage);
 			fileStream << totalWorkingDays << "," << empWageBuilder.companyName << "," << empWageBuilder.empName << "," << totalEmpHrs << "," << totalEmpWage << endl;
 		}
 
@@ -90,7 +98,7 @@ int main()
         fileStream.open( "EmployeeWage.csv", ios::out | ios::trunc );
 
 	int months;
-	cout << "Enter the number of month month" << endl;
+	cout << "Enter the number of month" << endl;
 	cin >> months;
 
 	struct EmpWageBuilder empWageBuilder[2];
