@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <list>
 #include <cstdlib>
 #include <fstream>
 #include <unistd.h>
@@ -27,7 +28,11 @@ struct EmpWageBuilder
 
 struct EmpWage
 {
-
+	void addCompany(EmpWageBuilder empWageBuilder)
+	{
+		list<EmpWageBuilder> employeeData;
+		employeeData.push_back(empWageBuilder);
+	}
 	void employeeWage(EmpWageBuilder empWageBuilder)
 	{
 
@@ -72,9 +77,9 @@ struct EmpWage
 		fileStream.close();
 
 		totalEmpWage = totalEmpHrs * empWageBuilder.EMP_RATE_PER_HOUR;
-		cout << "employee wage is : "<< totalEmpWage << endl;
+		cout << empWageBuilder.empName << " " << "Wage is " << totalEmpWage << endl;
 
-
+		addCompany( empWageBuilder );
 	}
 };
 
