@@ -1,6 +1,5 @@
 #include <iostream>
 #include <ctime>
-#include <list>
 #include <vector>
 #include <cstdlib>
 #include <fstream>
@@ -13,24 +12,30 @@ struct EmpWageBuilder
 	string empName;
 	int months;
 	string companyName;
-	int  EMP_RATE_PER_HOUR;
+	int EMP_RATE_PER_HOUR;
 	int NUMBER_OF_WORKING_DAYS;
 	int MAX_HRS_IN_MONTH;
 	int totalEmpWage;
-	list<int> dailyWage;
+	vector<int> dailyWage;
+	vector<int> monthWage;
 
-	void setDailyWage( list<int> dailyWage ) {
+	void setDailyWage( vector<int> dailyWage ) {
 		this -> dailyWage = dailyWage;
 	}
 	void setEmpWage(int totalWage) {
 		this -> totalEmpWage = totalWage;
 	}
 
+	void setMonthWage(vector<int> storeMonthWage)
+        {
+                this -> monthWage = storeMonthWage;
+        }
+
 	void employeeDetails( string name, int months, string companyName, int  EMP_RATE_PER_HOUR, int NUMBER_OF_WORKING_DAYS , int MAX_HRS_IN_MONTH ) {
 		this -> empName = name;
 		this -> months = months;
 		this -> companyName = companyName;
-		this ->  EMP_RATE_PER_HOUR =  EMP_RATE_PER_HOUR;
+		this -> EMP_RATE_PER_HOUR =  EMP_RATE_PER_HOUR;
 		this -> NUMBER_OF_WORKING_DAYS = NUMBER_OF_WORKING_DAYS;
 		this -> MAX_HRS_IN_MONTH = MAX_HRS_IN_MONTH;
 	}
@@ -38,7 +43,7 @@ struct EmpWageBuilder
 
 struct EmpWage
 {
-	list<EmpWageBuilder> employeeData;
+	vector<EmpWageBuilder> employeeData;
 
 	void addCompany(EmpWageBuilder empWageBuilder)
 	{
@@ -46,7 +51,8 @@ struct EmpWage
 	}
 	void employeeWage(EmpWageBuilder empWageBuilder)
 	{
-		list<int> dailyWage;
+		vector<int> dailyWage;
+		vector<int> storeMonthWage;
 
 		int empHrs = 0;
 		int totalEmpHrs = 0;
@@ -54,6 +60,9 @@ struct EmpWage
 		int dailyEmpWage = 0;
 		int totalEmpWage = 0;
 		int totalWorkingDays = 0;
+		int monthFactor = 1;
+		int perMonthWage = 0;
+		int monthWage = 0;
 
 		const int IS_PART_TIME = 1;
 		const int IS_FULL_TIME = 2;
@@ -82,17 +91,28 @@ struct EmpWage
 					empHrs = 0;
 			}
 
-			totalEmpHrs +=empHrs;
+			totalEmpHrs += empHrs;
 			dailyEmpWage = empHrs * empWageBuilder.EMP_RATE_PER_HOUR;
 			totalEmpWage = totalEmpHrs * empWageBuilder.EMP_RATE_PER_HOUR;
-			dailyWage.push_back(totalEmpWage);
+			dailyWage.push_back(dailyEmpWage);
 			fileStream << totalWorkingDays << "," << empWageBuilder.companyName << "," << empWageBuilder.empName << "," << dailyEmpWage << "," << totalEmpWage << endl;
+
+			if(empWageBuilder.NUMBER_OF_WORKING_DAYS * monthFactor == totalWorkingDays)
+			{
+				perMonthWage = totalEmpWage - monthWage;
+				storeMonthWage.push_back(perMonthWage);
+				monthWage = totalEmpWage;
+				monthFactor++;
+			}
 		}
+
 
 		fileStream.close();
 
 		totalEmpWage = totalEmpHrs * empWageBuilder.EMP_RATE_PER_HOUR;
 		empWageBuilder.setEmpWage(totalEmpWage);
+
+		empWageBuilder.setMonthWage( storeMonthWage );
 
 		cout << empWageBuilder.empName << " " << "Wage is " << totalEmpWage << endl;
 
@@ -101,16 +121,59 @@ struct EmpWage
 	}
 };
 
-void searchTotalWage(string companyName, list<EmpWageBuilder> employeeData)
+void searchTotalWage(string companyName, vector<EmpWageBuilder> employeeData)
 {
-	for( EmpWageBuilder ewb : employeeData)
+	int companyWage = 0;
+	for( EmpWageBuilder ewb : employeeData )
 	{
 		if( ewb.companyName == companyName )
 		{
-			cout << "Total Wage of " << ewb.companyName << ":" << ewb.totalEmpWage << endl;
+			companyWage = companyWage + ewb.totalEmpWage;
+		}
+	}
+	 cout << "Total Wage of " << companyName << ":" << companyWage << endl;
+}
+
+void displayMonthlyWage(vector<EmpWageBuilder> employeeData, int sortMonth)
+{
+	cout << "Company Name" << " : " << "Employee Name" << " : " << "Month" << " : " << "Wage" << endl;
+
+	for(int i = 0; i < employeeData.size(); i++)
+	{
+		cout << employeeData[i].companyName << " : " << employeeData[i].empName << " : " << sortMonth << " : "
+			<< employeeData[i].monthWage[sortMonth] << endl;
+	}
+}
+
+void sortByMonthlyWage( vector<EmpWageBuilder> employeeData, int sortMonth )
+{
+	cout << "-----------------------sort By Month Wage----------------------"<< endl;
+	cout << "Before Sorting: " << endl;
+	displayMonthlyWage( employeeData, sortMonth );
+	EmpWageBuilder temp;
+
+	for( int i = 0; i < employeeData.size(); i++ )
+	{
+		int flag = 0;
+		for( int j = 0; j < employeeData.size() - 1 - i; j++ )
+		{
+			if( employeeData[j].monthWage[sortMonth] <
+                        	employeeData[j + 1].monthWage[sortMonth] )
+			{
+				temp = employeeData[j];
+				employeeData[j] = employeeData[j + 1];
+				employeeData[j + 1] = temp;
+				flag = 1;
+			}
+		}
+		if(flag == 0)
+		{
 			break;
 		}
 	}
+
+	cout << "After Sorting: " << endl;
+        displayMonthlyWage(employeeData, sortMonth);
 }
 
 int main()
@@ -119,18 +182,25 @@ int main()
         fstream fileStream;
         fileStream.open( "EmployeeWage.csv", ios::out | ios::trunc );
 
-	int months;
-	cout << "Enter the number of month" << endl;
-	cin >> months;
-
-	struct EmpWageBuilder empWageBuilder[2];
-	empWageBuilder[0].employeeDetails("Sonali", months, "BridgeLabz", 20, 10, 60);
-	empWageBuilder[1].employeeDetails("NiKita", months, "Amazon", 20, 25, 70);
+	struct EmpWageBuilder empWageBuilder[4];
+	empWageBuilder[0].employeeDetails("Sonali", 12, "BridgeLabz", 20, 10, 60);
+	empWageBuilder[1].employeeDetails("NiKita", 12, "Amazon", 20, 25, 70);
+	empWageBuilder[2].employeeDetails("NiKi", 12, "Amazon", 20, 25, 70);
+	empWageBuilder[3].employeeDetails("Bhakti", 12, "Google",30, 20, 60);
 
 	struct EmpWage empWage;
 	empWage.employeeWage(empWageBuilder[0]);
 	empWage.employeeWage(empWageBuilder[1]);
+	empWage.employeeWage(empWageBuilder[2]);
+	empWage.employeeWage(empWageBuilder[3]);
 
 	searchTotalWage("Amazon", empWage.employeeData);
+
+	cout << "Select month in between 1 to 12 for whichyou want to sort the empWage" << endl;
+	int sortMonth;
+	cin >> sortMonth;
+
+	sortByMonthlyWage( empWage.employeeData, sortMonth );
+
 	return 0;
 }
