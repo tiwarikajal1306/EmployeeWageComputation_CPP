@@ -71,7 +71,6 @@ struct EmpWage
 
 		fstream fileStream;
 		fileStream.open( "EmployeeWage.csv", ios::out | ios::app );
-		fileStream << "Day" << "," << "CompanyName" << "," << "Name" << "," << "DailyEmpWage" << "," << "TotalEmpWage" << endl;
 
 		while( totalEmpHrs < empWageBuilder.MAX_HRS_IN_MONTH * empWageBuilder.months &&
 			 totalWorkingDays < empWageBuilder.NUMBER_OF_WORKING_DAYS * empWageBuilder.months ) {
@@ -235,6 +234,7 @@ int main()
 
         fstream fileStream;
         fileStream.open( "EmployeeWage.csv", ios::out | ios::trunc );
+	fileStream << "Day" << "," << "CompanyName" << "," << "Name" << "," << "DailyEmpWage" << "," << "TotalEmpWage" << endl;
 
 	struct EmpWageBuilder empWageBuilder[5];
 	empWageBuilder[0].employeeDetails("Sonali", 12, "BridgeLabz", 20, 10, 60);
