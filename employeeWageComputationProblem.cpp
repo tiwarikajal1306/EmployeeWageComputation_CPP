@@ -176,6 +176,49 @@ void sortByMonthlyWage( vector<EmpWageBuilder> employeeData, int sortMonth )
         displayMonthlyWage(employeeData, sortMonth);
 }
 
+void displayDailyWage(vector<EmpWageBuilder> employeeData)
+{
+        cout << "Company Name" << " : " << "Employee Name" << " : " << "Daily Wage" << endl;
+
+        for(int i = 0; i < employeeData.size(); i++)
+        {
+                cout << employeeData[i].companyName << " : " << employeeData[i].empName << " : "
+                        << employeeData[i].EMP_RATE_PER_HOUR * 8 << endl;
+        }
+}
+
+
+void sortByDailyWage(vector<EmpWageBuilder> employeeData)
+{
+	cout << "------------------------- Sort By Daily Wage ---------------------------" << endl;
+        cout << "Before Sorting: " << endl;
+        displayDailyWage(employeeData);
+        EmpWageBuilder temp;
+
+        for( int i = 0; i < employeeData.size(); i++ )
+        {
+                int flag = 0;
+                for( int j = 0; j < employeeData.size() - 1 - i ; j++ )
+                {
+                        if( employeeData[j].EMP_RATE_PER_HOUR <
+                                	employeeData[j + 1].EMP_RATE_PER_HOUR )
+                        {
+                                temp = employeeData[j];
+                                employeeData[j] = employeeData[j + 1];
+                                employeeData[j + 1] = temp;
+                                flag = 1;
+			}
+                }
+                if(flag == 0)
+                {
+                        break;
+                }
+        }
+
+        cout << "After Sorting: " << endl;
+        displayDailyWage(employeeData);
+}
+
 int main()
 {
 
@@ -184,8 +227,8 @@ int main()
 
 	struct EmpWageBuilder empWageBuilder[4];
 	empWageBuilder[0].employeeDetails("Sonali", 12, "BridgeLabz", 20, 10, 60);
-	empWageBuilder[1].employeeDetails("NiKita", 12, "Amazon", 20, 25, 70);
-	empWageBuilder[2].employeeDetails("NiKi", 12, "Amazon", 20, 25, 70);
+	empWageBuilder[1].employeeDetails("NiKita", 12, "Amazon", 25, 25, 70);
+	empWageBuilder[2].employeeDetails("NiKi", 12, "Amazon", 15, 25, 70);
 	empWageBuilder[3].employeeDetails("Bhakti", 12, "Google",30, 20, 60);
 
 	struct EmpWage empWage;
@@ -201,6 +244,7 @@ int main()
 	cin >> sortMonth;
 
 	sortByMonthlyWage( empWage.employeeData, sortMonth );
+	sortByDailyWage( empWage.employeeData);
 
 	return 0;
 }
