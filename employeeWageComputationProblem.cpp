@@ -219,23 +219,38 @@ void sortByDailyWage(vector<EmpWageBuilder> employeeData)
         displayDailyWage(employeeData);
 }
 
+void findEmployee(int wagePerHour, vector<EmpWageBuilder> employeeData)
+{
+        for(EmpWageBuilder data : employeeData)
+        {
+                if(data.EMP_RATE_PER_HOUR == wagePerHour)
+                {
+                        cout << "Name Of Employee is: " << data.empName << ", Whose Wage is: "  << data.EMP_RATE_PER_HOUR << endl;
+                }
+        }
+}
+
 int main()
 {
 
         fstream fileStream;
         fileStream.open( "EmployeeWage.csv", ios::out | ios::trunc );
 
-	struct EmpWageBuilder empWageBuilder[4];
+	struct EmpWageBuilder empWageBuilder[5];
 	empWageBuilder[0].employeeDetails("Sonali", 12, "BridgeLabz", 20, 10, 60);
 	empWageBuilder[1].employeeDetails("NiKita", 12, "Amazon", 25, 25, 70);
 	empWageBuilder[2].employeeDetails("NiKi", 12, "Amazon", 15, 25, 70);
 	empWageBuilder[3].employeeDetails("Bhakti", 12, "Google",30, 20, 60);
+	empWageBuilder[4].employeeDetails("sachin", 12, "Flipkart",50, 20, 60);
+
 
 	struct EmpWage empWage;
 	empWage.employeeWage(empWageBuilder[0]);
 	empWage.employeeWage(empWageBuilder[1]);
 	empWage.employeeWage(empWageBuilder[2]);
 	empWage.employeeWage(empWageBuilder[3]);
+	empWage.employeeWage(empWageBuilder[4]);
+
 
 	searchTotalWage("Amazon", empWage.employeeData);
 
@@ -246,5 +261,7 @@ int main()
 	sortByMonthlyWage( empWage.employeeData, sortMonth );
 	sortByDailyWage( empWage.employeeData);
 
+	cout << "Eployee Whose wage per hour is 50 " << endl;
+	findEmployee(50, empWage.employeeData);
 	return 0;
 }
